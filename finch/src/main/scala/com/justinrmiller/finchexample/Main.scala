@@ -52,7 +52,7 @@ object Main extends TwitterServer {
   def deleteTodo: Endpoint[Todo] = delete("todos" :: uuid) { id: UUID =>
     Todo.get(id) match {
       case Some(t) => Todo.delete(id); Ok(t)
-      case None => throw new TodoNotFound(id)
+      case None => throw TodoNotFound(id)
     }
   }
 
