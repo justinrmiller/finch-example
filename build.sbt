@@ -1,10 +1,10 @@
 val libVersion = "0.1"
 
 lazy val finchVersion = "0.11.+"
-lazy val finagleVersion = "6.35.0"
+lazy val finagleVersion = "6.40.0"
 lazy val utilVersion = "6.39.0"
-lazy val twitterServerVersion = "1.20.0"
-lazy val circeVersion = "0.4.1"
+lazy val twitterServerVersion = "1.25.0"
+lazy val circeVersion = "0.6.1"
 lazy val catsVersion = "0.8.1"
 lazy val catbirdVersion = "0.9.0"
 
@@ -47,9 +47,17 @@ val myAssemblySettings = Seq(
   }
 )
 
-lazy val app = (project in file("finch")).
+lazy val app = (project in file(".")).
   settings(commonSettings: _*).
   settings(myAssemblySettings: _*).
   settings(
     mainClass in assembly := Some("com.justinrmiller.finchexample.Main")
   )
+
+artifact in (Compile, assembly) := {
+  val art = (artifact in (Compile, assembly)).value
+  art.copy(`classifier` = Some("assembly"))
+}
+
+addArtifact(artifact in (Compile, assembly), assembly)
+

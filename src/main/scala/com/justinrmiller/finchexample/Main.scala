@@ -21,7 +21,7 @@ object Main extends TwitterServer {
   val todos: Counter = statsReceiver.counter("todos")
 
   def postedTodo: Endpoint[Todo] =
-    body.as[UUID => Todo].map(_(UUID.randomUUID()))
+    jsonBody[UUID => Todo].map(_(UUID.randomUUID()))
 
   def postTodo: Endpoint[Todo] = post("todos" :: postedTodo) { t: Todo =>
     todos.incr()
@@ -30,7 +30,7 @@ object Main extends TwitterServer {
     Created(t)
   }
 
-  def patchedTodo: Endpoint[Todo => Todo] = body.as[Todo => Todo]
+  def patchedTodo: Endpoint[Todo => Todo] = jsonBody[Todo => Todo]
 
   def patchTodo: Endpoint[Todo] =
     patch("todos" :: uuid :: patchedTodo) { (id: UUID, pt: Todo => Todo) =>
